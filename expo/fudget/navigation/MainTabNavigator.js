@@ -5,17 +5,17 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
+import CameraScreen from '../screens/CameraScreen';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 export default TabNavigator(
   {
+    Camera: {
+      screen: CameraScreen,
+    },
     Home: {
       screen: HomeScreen,
-    },
-    Links: {
-      screen: LinksScreen,
     },
     Settings: {
       screen: SettingsScreen,
@@ -27,15 +27,15 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
+          case 'Camera':
+            iconName = Platform.OS === 'ios'
+              ? `ios-camera${focused ? '' : '-outline'}`
+              : 'md-camera';
+            break;
           case 'Home':
             iconName = Platform.OS === 'ios'
-              ? `ios-information-circle${focused ? '' : '-outline'}`
-              : 'md-information-circle';
-            break;
-          case 'Links':
-            iconName = Platform.OS === 'ios'
-              ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-link';
+              ? `ios-home${focused ? '' : '-outline'}`
+              : 'md-home';
             break;
           case 'Settings':
             iconName = Platform.OS === 'ios'
