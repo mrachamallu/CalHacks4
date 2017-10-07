@@ -21,33 +21,27 @@ export default class App extends Component {
     budgets: []
   }
 
-  keyExtractor = (topic, index) => topic.id;
+  keyExtractor = (item, index) => item.id;
 
   loadPage = () => {
-    fetch('test.json')
-          .then((res) => res.json())
-          .then((data) => {
-            this.setState({
-              budgets: data.topics
-            });
-          })
-          .catch(function(error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
-           // ADD THIS THROW error
-            throw error;
-          });
+    var customData = require("./test.json")
 
-    Keyboard.dismiss()
+            this.setState({
+              budgets: customData.topics
+            });
+
   }
 
-  renderBudget = ({topic}) => {
-    return <BudgetPart 
-      type = {topic.type}
-      budget = {topic.budget}
-      moneySpent = {topic.moneySpent}
-      moneyLeft = {topic.moneyLeft}
-      percentage = {topic.percentage}
-      />
+  renderBudget = ({item}) => {
+    return <BudgetPart
+
+        budget = {item.budget} 
+        type = {item.type}
+        moneySpent = {item.moneySpent}
+        moneyLeft = {item.moneyLeft}
+        percentage = {item.percentage}
+    />
+      
   }
 
   render() {
@@ -57,7 +51,7 @@ export default class App extends Component {
         <FlatList
           data={this.state.budgets}
           keyExtractor={this.keyExtractor}
-          renderBudget={this.renderBudget}
+          renderItem={this.renderBudget}
           style={styles.list}
         />
       </View>
