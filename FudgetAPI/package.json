@@ -4,7 +4,8 @@
   "description": "RESTful fudgetapi",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/kgopal492/CalHacks4/issues"
   },
-  "homepage": "https://github.com/kgopal492/CalHacks4#readme"
+  "homepage": "https://github.com/kgopal492/CalHacks4#readme",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
 }
