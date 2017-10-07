@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   Item = mongoose.model('Items');
 
 exports.list_all_items = function(req, res) {
-  Item.find({category: 'Groceries'}, function(err, items) {
+  Item.find({name: 'apple'}, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
