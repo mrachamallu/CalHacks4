@@ -8,7 +8,7 @@ module.exports = function(app) {
     .post(fudget.create_an_item);
 
 
-  app.route('/items/:itemID')
+  app.route('/items/:itemId')
     .get(fudget.read_an_item)
     .put(fudget.update_an_item)
     .delete(fudget.delete_an_item);
