@@ -1,7 +1,9 @@
 'use strict';
 var mongoose = require('mongoose');
 require('mongoose-double')(mongoose);
+
 var Schema = mongoose.Schema;
+var SchemaTypes = mongoose.Schema.Types
 
 var ItemSchema = new Schema({
   name: {
@@ -13,9 +15,9 @@ var ItemSchema = new Schema({
     default: Date.now
   },
   price: {
-    type: Schema.Types.Double,
+    type: SchemaTypes.Double,
     required: 'what is the price'
-  }
+  },
   store_location: {
   	type: String,
   },
