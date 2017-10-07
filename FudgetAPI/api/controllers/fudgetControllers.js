@@ -13,7 +13,7 @@ exports.list_all_items = function(req, res) {
 };
 
 exports.list_sorted_items = function(req, res) {
-  Item.find({}, function(err, items) {
+  Item.find({key: value}, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
