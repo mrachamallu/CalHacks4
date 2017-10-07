@@ -21,6 +21,17 @@ exports.list_sorted_items = function(req, res) {
   });
 };
 
+exports.get_total_budget = function(req, res) {
+  console.log(req.body);
+  var budget =
+  Item.find(req.body, function(err, items) {
+    if (err)
+      res.send(err);
+    budget += items.price;
+  });
+  res.json({"total_spending": budget});
+};
+
 
 exports.create_an_item = function(req, res) {
   var new_item = new Item(req.body);
@@ -107,12 +118,14 @@ exports.read_receipt = function(req, res) {
         store_location: storeLocation
       };  
       //store this json into an array NOT SURE IF THIS IS CORRECT
-      jsonOfItems.push(itemDetails);
+      if(itemDetails.name != "total") {
+        jsonOfItems.push(itemDetails);
+      }
     }
     i = j;
   }
   var out = jsonOfItems;
 
 
-  res.json(out);
+  res.json.stringify(out);
 }
