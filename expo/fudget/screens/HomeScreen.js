@@ -1,5 +1,6 @@
 import Expo from 'expo';
 import React from 'react';
+import * as Progress from 'react-native-progress';
 import {
   StyleSheet,
   Text,
@@ -10,102 +11,60 @@ import {
 
 export default class App extends React.Component {
   state = {
-    imageUri: null,
-    label: null,
+    data: null,
+    items: null,
+    budget: null
   }
 
   render() {
-    let imageView = null;
-    if (this.state.imageUri) {
-      imageView = (
-        <Image
-          style={{ width: 300, height: 300 }}
-          source={{ uri: this.state.imageUri }}
-        />
-      );
-    }
-
-    let labelView = null;
-    if (this.state.label) {
-      labelView = (
-        <Text style={{ margin: 5 }}>
-          {this.state.label}
-        </Text>
-      );
+    var budgets = [];
+    if(this.state.items != null){
+      for (var i = 0; i < this.state.items.length; i++) {
+        budgets.push(
+          <View>
+            <Progress.Bar progress={(this.state.budget-this.state.items[i].price)/this.state.budget} width={300} />
+            <Text>this.state.items[i].itemName</Text>
+          </View>
+        );
+      }
     }
 
     return (
       <View style={styles.container}>
-        {imageView}
-        {labelView}
         <TouchableOpacity
           style={{ margin: 5, padding: 5, backgroundColor: '#ddd' }}
-          onPress={this._pickImage}>
-          <Text>take a picture!</Text>
+          onPress={this._getData}>
+          <Text>Refresh</Text>
+          {this.state.data}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ margin: 5, padding: 5, backgroundColor: '#ddd' }}
+          onPress={this._openWeekly}>
+          {budgets}
         </TouchableOpacity>
       </View>
     );
   }
+}
 
-  _pickImage = async () => {
-    const {
-      cancelled,
-      uri,
-      base64,
-    } = await Expo.ImagePicker.launchCameraAsync({
-      base64: true,
-    });
-    if (!cancelled) {
-      this.setState({
-        imageUri: uri,
-        label: '(loading...)',
-      });
-    }
+_openWeekly = function(){
+  // redirect to weekly
+}
 
-    const body = {
-      requests:[
-        {
-          image:{
-            content: base64,
-          },
-          features:[
-            {
-              type: 'TEXT_DETECTION',
-              maxResults: 100,
-            }
-          ]
-        },
-      ],
-    };
-
-    const key = 'AIzaSyCScDq8xvUnb1x4JDyt9zRHawD-imeyzuE';
-    const response_vis = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${key}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    const parsed_vis = await response_vis.json();
-    this.setState({
-      label: parsed_vis.responses[0].textAnnotations[0].description,
-    });
-
-    // // send to custom api
-    // const res_db = await fetch('http://localhost:3000/receipts', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(parsed_vision),
-    // });
-    // const parsed_db = await res_db.json();
-    // if(!res_db.fail){
-    //   // go to budget page
-    // }
-  }
+_getData = async () => {
+  const req_data = await fetch('https://fudget-finance.herokuapp.com/items', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  });
+  const res_data = await req_data.json();
+  this.setState({
+    data: JSON.stringify(res_data),
+    items: res_data.items,
+    budget: res_data.budget,
+  });
 }
 
 const styles = StyleSheet.create({
