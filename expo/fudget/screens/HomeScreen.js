@@ -1,233 +1,104 @@
+import Expo from 'expo';
 import React from 'react';
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  Button,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
-import { 
-  WebBrowser, 
-  ImagePicker 
-} from 'expo';
 
-import { MonoText } from '../components/StyledText';
-var upload = require("../api/upload.js");
-export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
+export default class App extends React.Component {
   state = {
-    imageUri: null
+    imageUri: null,
+    label: null,
   }
+
   render() {
+    let imageView = null;
+    if (this.state.imageUri) {
+      imageView = (
+        <Image
+          style={{ width: 300, height: 300 }}
+          source={{ uri: this.state.imageUri }}
+        />
+      );
+    }
+
+    let labelView = null;
+    if (this.state.label) {
+      labelView = (
+        <Text style={{ margin: 5 }}>
+          {this.state.label}
+        </Text>
+      );
+    }
+
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-{/*          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening poop</Text>
-
-            <View
-              style={[
-                styles.codeHighlightContainer,
-                styles.homeScreenFilename,
-              ]}>
-              <MonoText style={styles.codeHighlightText}>
-                screens/HomeScreen.js
-              </MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-  
-          <View style={styles.helpContainer}>
-            <TouchableOpacity
-              onPress={this._handleHelpPress}
-              style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>
-                Help, it didn’t automatically reload!
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-        */}
-
-          <Button 
-            title="Add a Receipt" 
-            onPress={this._takePhotoAsync} 
-          />
-          <Text>This is the image uri: {this.state.imageUri}</Text>
-        </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>
-            This is a tab bar. You can edit it in:
-          </Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>
-              navigation/MainTabNavigator.js
-            </MonoText>
-          </View>
-        </View>
+        {imageView}
+        {labelView}
+        <TouchableOpacity
+          style={{ margin: 5, padding: 5, backgroundColor: '#ddd' }}
+          onPress={this._pickImage}>
+          <Text>take a picture!</Text>
+        </TouchableOpacity>
       </View>
     );
   }
-  _takePhotoAsync = async () => {
-    let image = await Expo.ImagePicker.launchCameraAsync({
-      base64: true
+
+  _pickImage = async () => {
+    const {
+      cancelled,
+      uri,
+      base64,
+    } = await Expo.ImagePicker.launchCameraAsync({
+      base64: true,
     });
-    if(!image.cancelled) {
-      this.setState({imageUri: image.uri});
-      this.setState({base64: image.base64});
-      var json = upload(this.state.base64);
-      this.setState({json: json});
-      
+    if (!cancelled) {
+      this.setState({
+        imageUri: uri,
+        label: '(loading...)',
+      });
     }
+
+    const body = {
+      requests:[
+        {
+          image:{
+            content: base64,
+          },
+          features:[
+            {
+              type: 'TEXT_DETECTION',
+              maxResults: 100,
+            }
+          ]
+        },
+      ],
+    };
+
+    const key = 'AIzaSyCScDq8xvUnb1x4JDyt9zRHawD-imeyzuE';
+    const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${key}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    const parsed = await response.json();
+    this.setState({
+      label: parsed.responses[0].textAnnotations[0].description,
+    });
   }
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use
-          useful development tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/development-mode'
-    );
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
-
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+    justifyContent: 'center',
   },
 });
