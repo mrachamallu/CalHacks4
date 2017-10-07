@@ -127,5 +127,5 @@ exports.read_receipt = function(req, res) {
   var out = jsonOfItems;
 
 
-  res.json.stringify(out);
+  res.json(out);
 }
