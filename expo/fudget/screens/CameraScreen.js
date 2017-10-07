@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
 
 export default class App extends React.Component {
@@ -46,7 +47,7 @@ export default class App extends React.Component {
     // }
 
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {imageView}
         {textView}
         <TouchableOpacity
@@ -54,7 +55,7 @@ export default class App extends React.Component {
           onPress={this._pickImage}>
           <Text>take a picture!</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   }
 
@@ -89,7 +90,7 @@ export default class App extends React.Component {
     };
 
     const key = 'AIzaSyCScDq8xvUnb1x4JDyt9zRHawD-imeyzuE';
-    const response_vis = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${key}`, {
+    const response_vis = await fetch('https://vision.googleapis.com/v1/images:annotate?key=${key}', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -103,19 +104,31 @@ export default class App extends React.Component {
       text_arr: parsed_vis,
     });
 
-    // // send to custom api
-    // const res_db = await fetch('http://localhost:3000/receipts', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(parsed_vision),
-    // });
-    // const parsed_db = await res_db.json();
-    // if(!res_db.fail){
-    //   // go to budget page
-    // }
+    // send to custom api
+    const res_db = await fetch('https://fudget-finance.herokuapp.com/receipts', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(parsed_vis),
+    });
+    const parsed_db = await res_db.json();
+    this.setState({
+      //label: JSON.stringify(parsed_db),
+    });
+
+    // confirm send to db (one at a time)
+    for(var i = 0; i < parsed_db.length; i++){
+      fetch('https://fudget-finance.herokuapp.com/items', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(parsed_db[i]),
+      });
+    }
   }
 }
 
