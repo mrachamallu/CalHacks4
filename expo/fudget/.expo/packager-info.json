@@ -1,8 +1,8 @@
 {
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 7404,
-  "expoServerNgrokUrl": "https://4x-jgj.donutdaniel.fudget.exp.direct",
-  "packagerNgrokUrl": "https://packager.4x-jgj.donutdaniel.fudget.exp.direct",
-  "ngrokPid": 7148
+  "expoServerPort": 19001,
+  "packagerPort": 19002,
+  "packagerPid": 2156,
+  "expoServerNgrokUrl": "https://9a-44t.donutdaniel.fudget.exp.direct",
+  "packagerNgrokUrl": "https://packager.9a-44t.donutdaniel.fudget.exp.direct",
+  "ngrokPid": 16180
 }

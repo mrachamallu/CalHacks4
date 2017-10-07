@@ -22,9 +22,9 @@ module.exports = function(fileName){
 
 		//send to custom api
 		var options = {
-			hostname: process.env.DB_HOST,
-			port: '',
-			path: process.env.DB_PATH,
+			hostname: 'localhost',
+			port: '3000',
+			path: '/items',
 			method: 'POST',
 		}
 
@@ -44,6 +44,7 @@ module.exports = function(fileName){
 				}
 			});
 		});
+		req.write(JSON.stringify(fileName));
 		req.on('error', (err) => {
 			console.error(err);
 		});
