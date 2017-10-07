@@ -24,7 +24,7 @@ exports.create_an_item = function(req, res) {
 
 
 exports.read_an_item = function(req, res) {
-  Item.findById(req.params.itemsId, function(err, items) {
+  Item.findById(req.params.taskId, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
@@ -33,7 +33,7 @@ exports.read_an_item = function(req, res) {
 
 
 exports.update_an_item = function(req, res) {
-  Item.findOneAndUpdate({_id: req.params.itemId}, req.body, {new: true}, function(err, items) {
+  Item.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
@@ -43,7 +43,7 @@ exports.update_an_item = function(req, res) {
 
 exports.delete_an_item = function(req, res) {
   Item.remove({
-    _id: req.params.itemsId
+    _id: req.params.taskId
   }, function(err, items) {
     if (err)
       res.send(err);
