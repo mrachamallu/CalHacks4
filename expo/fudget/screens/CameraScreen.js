@@ -11,7 +11,7 @@ import {
 export default class App extends React.Component {
   state = {
     imageUri: null,
-    label: null,
+    text: null,
   }
 
   render() {
@@ -25,19 +25,30 @@ export default class App extends React.Component {
       );
     }
 
-    let labelView = null;
-    if (this.state.label) {
-      labelView = (
+    let textView = null;
+    if (this.state.text) {
+      textView = (
         <Text style={{ margin: 5 }}>
-          {this.state.label}
+          {this.state.text}
         </Text>
       );
     }
 
+    // var texts = [];
+    // for(let i = 0; i < this.state.text_arr.size; i++){
+    //   texts.push(
+    //     <View key = {i}>
+    //       <Text>
+    //         {this.state.text_arr.textAnnotations[i].description}
+    //       </Text>
+    //     </View>
+    //   );
+    // }
+
     return (
       <View style={styles.container}>
         {imageView}
-        {labelView}
+        {textView}
         <TouchableOpacity
           style={{ margin: 5, padding: 5, backgroundColor: '#ddd' }}
           onPress={this._pickImage}>
@@ -58,7 +69,7 @@ export default class App extends React.Component {
     if (!cancelled) {
       this.setState({
         imageUri: uri,
-        label: '(loading...)',
+        text: '(loading...)',
       });
     }
 
@@ -70,8 +81,7 @@ export default class App extends React.Component {
           },
           features:[
             {
-              type: 'TEXT_DETECTION',
-              maxResults: 100,
+              type: 'DOCUMENT_TEXT_DETECTION'
             }
           ]
         },
@@ -89,7 +99,8 @@ export default class App extends React.Component {
     });
     const parsed_vis = await response_vis.json();
     this.setState({
-      label: parsed_vis.responses[0].textAnnotations[0].description,
+      text: parsed_vis.responses[0].textAnnotations[1].description,
+      text_arr: parsed_vis,
     });
 
     // // send to custom api
