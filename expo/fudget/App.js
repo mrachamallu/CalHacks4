@@ -4,6 +4,9 @@ import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 
+//load environment variables
+require('dotenv-extended').load();
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
