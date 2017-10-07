@@ -56,37 +56,40 @@ var jsonOfItems = [];
 exports.read_receipt = function(req, res) {
   var TA = req.body.textAnnotations;
   console.log(TA);
-  var storeLocation = TA[0].description; //the first element is always the store
+  var storeLocation = TA[1].description; //the first element is always the store
   var dateOfPurchase = new Date(); //date of purchase
+  var dollars;
+  var cents;
+  var value = 0;
   for(var i=0 ; i<TA.length ; i++) {
-    int j = i; //j is a temp counter
+    var j = i; //j is a temp counter
     //add value after dollar sign
     if(TA[i].description === "$") {
+      dollars = 0;
+      cents = 0;
       console.log("$");
-      var dollars = 0;
-      var cents = 0;
       j++;
-      while(Number(TA[i].description)) {
-        console.log(TA[i].description);
-        dollars += Number(TA[i].description);
+      while(Number(TA[j].description)) {
+        console.log(TA[j].description);
+        dollars += Number(TA[j].description);
         j++;
       }//add cents if there is a decimal
-      if(TA[i].description === ".") {
+      if(TA[j].description === ".") {
         j++;
-        while(Number(TA[i].description)) {
-          console.log(TA[i].description);
-          cents += Number(TA[i].description);
+        while(Number(TA[j].description)) {
+          console.log(TA[j].description);
+          cents += Number(TA[j].description);
           j++;
         }
       }
+      value = dollars + (cents/100);
+      console.log(value); //prints dollar value
+
       //if there is a $ sign, print the word that comes before the $ amount.
       if (i-1 >= 0) {
         var itemName = TA[i-1].description;
         console.log(itemName);
       }      
-      var value = dollars + (cents/100);
-      console.log(value); //prints dollar value
-
       //at this point, there is enough info to make a json object
       var itemDetails = {
         name : itemName,
@@ -99,7 +102,8 @@ exports.read_receipt = function(req, res) {
     }
     i = j;
   }
+  var out = {"items": jsonOfItems};
 
 
-  res.json({message: "Body printed to console"});
+  res.json(out);
 }
