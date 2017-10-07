@@ -1,0 +1,23 @@
+{
+	"topics": [{
+		"type": "Food",
+		"budget": 15.00,
+		"moneySpent": 4.35,
+		"moneyLeft": 10.65
+		"percentage": 29
+	},
+	{
+		"type": "Clothing",
+		"budget": 25.00,
+		"moneySpent": 10.00,
+		"moneyLeft": 15.00,
+		"percentage": 40
+	},
+	{
+		"type": "Coffee",
+		"budget": 10.00,
+		"moneySpent": 7.00,
+		"moneyLeft": 3.00,
+		"percentage": 70
+	}]
+}
