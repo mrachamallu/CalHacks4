@@ -50,3 +50,8 @@ exports.delete_an_item = function(req, res) {
     res.json({ message: 'Item successfully deleted' });
   });
 };
+
+exports.read_receipt = function(req, res) {
+  console.log(req.body);
+  res.json({message: "Body printed to console"});
+}

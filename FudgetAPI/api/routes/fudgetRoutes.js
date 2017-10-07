@@ -12,4 +12,7 @@ module.exports = function(app) {
     .get(fudget.read_an_item)
     .put(fudget.update_an_item)
     .delete(fudget.delete_an_item);
+
+  app.route('/receipt')
+  	.post(fudget.read_receipt);
 };
