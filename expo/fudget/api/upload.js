@@ -1,17 +1,14 @@
-var React = require('react-native');
-
-const mongoose = require('mongoose');
 const Vision = require('@google-cloud/vision');
 
 const vision = Vision();
 
-module.exports = function(fileName){
+module.exports = function(base64){
 	// mongoose.connect() 
 
 	// request CV
 	const request = {
-		source: {
-			fileName: fileName
+		image:{
+			content: base64
 		}
 	}
 

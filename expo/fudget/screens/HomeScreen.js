@@ -15,7 +15,7 @@ import {
 } from 'expo';
 
 import { MonoText } from '../components/StyledText';
-{/*var upload = require("../api/upload.js");*/}
+var upload = require("../api/upload.js");
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -95,10 +95,14 @@ export default class HomeScreen extends React.Component {
     );
   }
 _takePhotoAsync = async () => {
-  let image = await Expo.ImagePicker.launchCameraAsync();
+  let image = await Expo.ImagePicker.launchCameraAsync({
+    base64: true
+  });
   if(!image.cancelled) {
     this.setState({imageUri: image.uri});
-  {/*upload(this.state.imageUri);*/}
+    this.setState({base64: image.base64});
+    var fail = upload(this.state.base64);
+    console.log(fail);
   }
 }
   _maybeRenderDevelopmentModeWarning() {
