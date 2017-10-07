@@ -24,7 +24,7 @@ exports.create_an_item = function(req, res) {
 
 
 exports.read_an_item = function(req, res) {
-  Item.findById(req.params.taskId, function(err, items) {
+  Item.findById(req.params.itemsId, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
@@ -43,7 +43,7 @@ exports.update_an_item = function(req, res) {
 
 exports.delete_an_item = function(req, res) {
   Item.remove({
-    _id: req.params.itemId
+    _id: req.params.itemsId
   }, function(err, items) {
     if (err)
       res.send(err);
