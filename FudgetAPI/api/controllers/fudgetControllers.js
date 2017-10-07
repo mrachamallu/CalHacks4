@@ -13,8 +13,6 @@ exports.list_all_items = function(req, res) {
 };
 
 
-
-
 exports.create_an_item = function(req, res) {
   var new_item = new Item(req.body);
   new_item.save(function(err, items) {
@@ -44,8 +42,6 @@ exports.update_an_item = function(req, res) {
 
 
 exports.delete_an_item = function(req, res) {
-
-
   Item.remove({
     _id: req.params.itemId
   }, function(err, items) {
