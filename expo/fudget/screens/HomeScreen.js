@@ -1,6 +1,7 @@
 import Expo from 'expo';
 import React from 'react';
-import ProgressCircle from 'react-native-progress-circle'
+import * as Progress from 'react-native-progress';
+
 import {
   StyleSheet, 
   Text, 
@@ -20,7 +21,7 @@ import BudgetPart from './BudgetPart';
 export default class App extends React.Component {
   state = {
       categories: [],
-    }
+  }
 
   loadMonth = () => {
     fetch("test.json")
@@ -30,7 +31,6 @@ export default class App extends React.Component {
               categories: data.topics
             });
           });
-
     Keyboard.dismiss()
   }
 
@@ -49,7 +49,7 @@ export default class App extends React.Component {
       <View>
         <Button title="Search" onPress={this.loadMonth} />
         {/*<ProgressCircle
-            percent={this.state.proportion}
+            percent={this.state.proportion} use progressbars
             radius={30}
             borderWidth={8}
             color="#000"
@@ -67,6 +67,22 @@ export default class App extends React.Component {
       />
       </View>
     );
+  }
+
+  _getData = async () => {
+    const req_data = await fetch('https://fudget-finance.herokuapp.com/items', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    });
+    const res_data = await req_data.json();
+    this.setState({
+      data: JSON.stringify(res_data),
+      items: res_data.items,
+      budget: res_data.budget,
+    });
   }
 }
 
