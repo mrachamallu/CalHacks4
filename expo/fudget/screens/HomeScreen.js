@@ -7,23 +7,29 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { 
+  WebBrowser, 
+  ImagePicker 
+} from 'expo';
 
 import { MonoText } from '../components/StyledText';
-
+{/*var upload = require("../api/upload.js");*/}
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
-
+  state = {
+    imageUri: null
+  }
   render() {
     return (
       <View style={styles.container}>
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+{/*          <View style={styles.welcomeContainer}>
             <Image
               source={
                 __DEV__
@@ -53,7 +59,7 @@ export default class HomeScreen extends React.Component {
               Change this text and your app will automatically reload.
             </Text>
           </View>
-
+  
           <View style={styles.helpContainer}>
             <TouchableOpacity
               onPress={this._handleHelpPress}
@@ -63,6 +69,14 @@ export default class HomeScreen extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
+
+        */}
+
+          <Button 
+            title="Add a Receipt" 
+            onPress={this._takePhotoAsync} 
+          />
+          <Text>This is the image uri: {this.state.imageUri}</Text>
         </ScrollView>
 
         <View style={styles.tabBarInfoContainer}>
@@ -80,7 +94,13 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
-
+_takePhotoAsync = async () => {
+  let image = await Expo.ImagePicker.launchCameraAsync();
+  if(!image.cancelled) {
+    this.setState({imageUri: image.uri});
+  {/*upload(this.state.imageUri);*/}
+  }
+}
   _maybeRenderDevelopmentModeWarning() {
     if (__DEV__) {
       const learnMoreButton = (
