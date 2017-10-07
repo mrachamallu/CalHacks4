@@ -12,7 +12,6 @@ mongoose.connect('mongodb://localhost/Fudgetdb');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({limit: '5mb'}));
-app.use(bodyParser.urlencoded({limit: '5mb'}));
 
 var routes = require('./api/routes/fudgetRoutes'); //importing route
 routes(app); //register the route

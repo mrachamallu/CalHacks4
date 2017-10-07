@@ -52,6 +52,31 @@ exports.delete_an_item = function(req, res) {
 };
 
 exports.read_receipt = function(req, res) {
-  console.log(req.body);
+  var TA = req.body.textAnnotations;
+  console.log(TA);
+  for(var i=0 ; i<TA.length ; i++) {
+    if(TA[i].description === "$") {
+      console.log("$");
+      var dollars = 0;
+      var cents = 0;
+      i++;
+      while(Number(TA[i].description)) {
+        console.log(TA[i].description);
+        dollars += Number(TA[i].description);
+        i++;
+      }
+      if(TA[i].description === ".") {
+        i++;
+        while(Number(TA[i].description)) {
+          console.log(TA[i].description);
+          cents += Number(TA[i].description);
+          i++;
+        }
+      }
+      var value = dollars + (cents/100);
+      console.log(value);
+    }
+  }
+
   res.json({message: "Body printed to console"});
 }
