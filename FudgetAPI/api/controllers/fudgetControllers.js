@@ -72,9 +72,11 @@ exports.read_receipt = function(req, res) {
           cents += Number(TA[i].description);
           i++;
         }
+        //intead of i++ above, can you use a temp variable? bc im printing i-1 for the word before
+      if (i-1 >= 0) {console.log(TA[i-1].description)} //if there is a $ sign, print the word that comes before the $ amount.
       }
       var value = dollars + (cents/100);
-      console.log(value);
+      console.log(value); //prints dollar value
     }
   }
 
