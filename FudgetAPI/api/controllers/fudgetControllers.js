@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   Item = mongoose.model('Items');
 
 exports.list_all_items = function(req, res) {
-  Item.find({name: 'apple'}, function(err, items) {
+  Item.find({'name': 'apple'}, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
@@ -13,8 +13,8 @@ exports.list_all_items = function(req, res) {
 };
 
 exports.list_sorted_items = function(req, res) {
-  console.log(req.Body);
-  Item.find(req.Body, function(err, items) {
+  console.log(req.body);
+  Item.find(req.body, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
