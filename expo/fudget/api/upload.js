@@ -14,16 +14,11 @@ module.exports = function(base64Img){
 	});	
 
 	vision.annotate(req).then(async (res) => {
-		console.log(JSON.stringify(res.response));
-
 		const response = await fetch('http://localhost:3000/receipt', {
 			method: 'POST',
 			body: JSON.stringify(res.response),
 		});
-		const parsed = await response.json();
-		this.setState({
-			label: parsed.response[0].labelAnnotations[0].description
-		});
+		return JSON.stringify(res.response);
 	}, (e) => {
 		console.log('Error: ', e);
 	});

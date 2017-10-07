@@ -94,17 +94,18 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
-_takePhotoAsync = async () => {
-  let image = await Expo.ImagePicker.launchCameraAsync({
-    base64: true
-  });
-  if(!image.cancelled) {
-    this.setState({imageUri: image.uri});
-    this.setState({base64: image.base64});
-    var fail = upload(this.state.base64);
-    console.log(fail);
+  _takePhotoAsync = async () => {
+    let image = await Expo.ImagePicker.launchCameraAsync({
+      base64: true
+    });
+    if(!image.cancelled) {
+      this.setState({imageUri: image.uri});
+      this.setState({base64: image.base64});
+      var json = upload(this.state.base64);
+      this.setState({json: json});
+      
+    }
   }
-}
   _maybeRenderDevelopmentModeWarning() {
     if (__DEV__) {
       const learnMoreButton = (
@@ -139,6 +140,7 @@ _takePhotoAsync = async () => {
       'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
     );
   };
+
 }
 
 const styles = StyleSheet.create({
