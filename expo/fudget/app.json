@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "fudget",
-    "description": "No description",
+    "description": "The app to finally manage all your finances",
     "slug": "fudget",
     "privacy": "public",
     "sdkVersion": "21.0.0",
