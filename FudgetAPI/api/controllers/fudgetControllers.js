@@ -102,7 +102,7 @@ exports.read_receipt = function(req, res) {
     }
     i = j;
   }
-  var out = {"items": jsonOfItems};
+  var out = jsonOfItems;
 
 
   res.json(out);
