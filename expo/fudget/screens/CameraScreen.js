@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: '#ffa500',
+    backgroundColor: '#ffffff',
     height: 60,
     width: 200,
     alignItems: 'center',
@@ -145,18 +145,3 @@ const styles = StyleSheet.create({
     fontSize: 100,
   }
 });
-
-  // _getData = async () => {
-  //   const req_data = await fetch('https://fudget-finance.herokuapp.com/items', {
-  //     method: 'GET',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //   });
-  //   const res_data = await req_data.json();
-  //   this.setState({
-  //     items: res_data.items,
-  //     budget: res_data.budget,
-  //   });
-  // }
