@@ -79,7 +79,6 @@ export default class App extends React.Component {
     });
     const res_data = await req_data.json();
     this.setState({
-      data: JSON.stringify(res_data),
       items: res_data.items,
       budget: res_data.budget,
     });
