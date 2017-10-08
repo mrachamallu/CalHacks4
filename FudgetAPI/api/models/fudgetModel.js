@@ -36,11 +36,11 @@ var BudgetSchema = new Schema({
   category: {
     type: String,
     required: "Enter the category of this budget"
-  }
+  },
   value: {
     type: SchemaTypes.Double,
     default: 0.0
-  }
+  },
   maxValue: {
     type: SchemaTypes.Double,
     required: "Please enter a budget value"
