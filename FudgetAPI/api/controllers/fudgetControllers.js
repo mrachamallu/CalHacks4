@@ -60,71 +60,47 @@ exports.delete_an_item = function(req, res) {
 };
 
 exports.read_receipt = function(req, res) {
-  var jsonOfItems = [];
-  //array of json objects
-  //console.log(req.body);
+
   var TA = req.body.responses[0].textAnnotations;
   console.log(TA);
   console.log('-----------');
+
+  // var text = TA[0].description;
+  // var regex = "{DATA:name}\%s{{DATETIME:date}\%s}"
+
   var storeLocation = TA[1].description; //the first element is always the store
+  console.log(storeLocation);
+  //set category. Use NLP later for better classification
+  if(store_location === 'Target') {
+    category = 'Groceries';
+  }
+  else if(store_location === 'Starbucks'){
+    category = 'Coffee';
+  }
+
   var dateOfPurchase = new Date(); //date of purchase
-  var dollars;
-  var cents;
-  var value = 0;
-  for(var i=0 ; i<TA.length ; i++) {
-    var j = i;
+  var value;
+  var itemName;
+  var itemDetails;
+  for(var i=2 ; i<TA.length ; i++) {
     //add value after dollar sign
-    if(TA[i].description === "$") {
-      dollars = 0;
-      cents = 0;
-      console.log("$");
-      i++;
-      while(Number(TA[i].description)) {
-        //console.log(TA[i].description);
-        dollars += Number(TA[j].description);
-        i++;
-      }//add cents if there is a decimal
-      if(TA[i].description === ".") {
-        i++;
-        while(Number(TA[i].description)) {
-          //console.log(TA[i].description);
-          cents += Number(TA[i].description);
-          i++;
-        }
-      }
-      value = dollars + (cents/100);
-      console.log(value); //prints dollar value
+    if(TA[i].description.includes("$")) {
+      value = Number(TA[i].description);
+      console.log(value);
+      itemName = TA[i-1].description;
+      console.log(itemName);
 
-      i = j;
-      //if there is a $ sign, print the word that comes before the $ amount.
-      if (i-1 >= 0) {
-        var itemName = TA[i-1].description;
-        console.log(itemName);
-      }      
-      //at this point, there is enough info to make a json object
-
-      //set category. Use NLP later for better classification
-      if(store_location === 'Target') {
-        category = 'Groceries';
-      }
-      else if(store_location === 'Starbucks'){
-        category = 'Coffee';
-      }
-      else if(store_location === '') {
-
-      }
-      var itemDetails = {
+      itemDetails = {
         name : itemName,
         date_bought: dateOfPurchase,
         price: value,
         store_location: storeLocation
-      };  
-      //store this json into an array NOT SURE IF THIS IS CORRECT
-      // if(itemDetails.name != "total") {
+      };
+      if(itemDetails.name != "total") {
         jsonOfItems.push(itemDetails);
-      // }
-    }
-    i = j;
+      }
+      
+    }      
   }
   var out = jsonOfItems;
   console.log(out);
