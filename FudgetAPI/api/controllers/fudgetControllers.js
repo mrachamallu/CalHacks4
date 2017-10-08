@@ -60,7 +60,7 @@ exports.delete_an_item = function(req, res) {
 };
 
 exports.read_receipt = function(req, res) {
-
+  var jsonOfItems;
   var TA = req.body.responses[0].textAnnotations;
   console.log(TA);
   console.log('-----------');
@@ -85,7 +85,7 @@ exports.read_receipt = function(req, res) {
   for(var i=2 ; i<TA.length ; i++) {
     //add value after dollar sign
     if(TA[i].description.includes("$")) {
-      value = Number(TA[i].description);
+      value = Number(TA[i].description.substr(1));
       console.log(value);
       itemName = TA[i-1].description;
       console.log(itemName);
@@ -99,7 +99,6 @@ exports.read_receipt = function(req, res) {
       if(itemDetails.name != "total") {
         jsonOfItems.push(itemDetails);
       }
-      
     }      
   }
   var out = jsonOfItems;
