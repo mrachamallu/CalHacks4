@@ -119,6 +119,12 @@ export default class App extends React.Component {
       body: JSON.stringify(parsed),
     });
     const parsed1 = await response1.json();
+    
+    /* 
+
+    this is where validation of the 'parsed' content happens
+
+    */
 
     this.setState({
       status: 'verified content. sending bits to be reconstructed...'
@@ -143,17 +149,19 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#5284f2',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
     height: 60,
     width: 200,
     alignItems: 'center',
     textAlign: 'center',
     borderRadius: 10,
+    borderColor: '#5284f2',
+    borderWidth: 1,
   },
   buttonText: {
     fontSize: 20
