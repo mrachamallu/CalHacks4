@@ -22,5 +22,9 @@
 		"moneyLeft": "3.00",
 		"percentage": "70",
 		"id": "odjkw" 
-	}]
+	}],
+	"totalBudget": 100.00,
+	"totalSpent": 99.00,
+	"totalPercent": 0.99,
+	"remainder:": 1.00
 }

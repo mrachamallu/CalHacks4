@@ -1,8 +1,8 @@
 {
-  "expoServerPort": 19007,
-  "packagerPort": 19009,
-  "packagerPid": 26866,
-  "expoServerNgrokUrl": "https://2m-5va.kgopal492.fudget.exp.direct",
-  "packagerNgrokUrl": "https://packager.2m-5va.kgopal492.fudget.exp.direct",
-  "ngrokPid": 26877
+  "expoServerPort": 19008,
+  "packagerPort": 19007,
+  "packagerPid": 28623,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

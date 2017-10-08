@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Expo from 'expo';
+import * as Progress from 'react-native-progress';
 import {
   StyleSheet, 
   Text, 
@@ -18,19 +19,34 @@ import BudgetPart from './BudgetPart'
 
 export default class App extends Component {
   state = {
-    budgets: []
+    budgets: [],
+    maxBudget: 1.0,
+    moneySpent: 0.0,
+    progPercent: 0.0,
+    remaining: 1.0,
   }
-
-  keyExtractor = (item, index) => item.id;
-
   loadPage = () => {
-    var customData = require("./test.json")
+    var data = require("./test.json")
+    this.setState({
+      budgets: data.topics
+    });
+    this.setState({
+      maxBudget: data.totalBudget
+    });
+    this.setState({
+      moneySpent: data.totalSpent
+    });
 
-            this.setState({
-              budgets: customData.topics
-            });
-
+    this.setState({
+      progPercent: data.totalPercent
+    });
+    this.setState({
+      remaining: data.remainder
+    });
+    alert(this.state.remaining);
   }
+  keyExtractor = (item, index) => item.id;
+  
 
   renderBudget = ({item}) => {
     return <BudgetPart
@@ -43,17 +59,25 @@ export default class App extends Component {
     />
       
   }
+  componentWillMount() {
+    this.loadPage();
+  }
 
   render() {
     return (
       <View style={styles.container}>
-        <Button title="Load" onPress={this.loadPage} color='#000000'/>
+        <Progress.Pie progress={this.state.progPercent} size={100} style={styles.pieChart}/>
+        <View style={styles.remainderStyle}>
+        {(this.state.moneySpent <= this.state.maxBudget) ? (<Text>$ {this.state.remaining} left!</Text>) : (<Text>${this.state.remaining} over!</Text>)}
+        </View>
+        {/*<Button title="Load" onPress={this.loadPage} color='#000000'/>*/}
         <FlatList
           data={this.state.budgets}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderBudget}
           style={styles.list}
         />
+        
       </View>
     );
   }
@@ -70,6 +94,12 @@ const styles = StyleSheet.create({
   },
   list: {
     width: '100%'
+  },
+  pieChart: {
+    padding: 25,
+  },
+  remainderStyle: {
+    fontSize: 16,
   },
 });
 
