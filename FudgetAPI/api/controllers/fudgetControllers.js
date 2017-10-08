@@ -75,7 +75,7 @@ exports.read_receipt = function(req, res) {
   //array of json objects
   var jsonOfItems = [];
 
-  var TA = req.body;
+  var TA = req.body.responses[0].textAnnotions;
   console.log(TA);
   var storeLocation = TA[1].description; //the first element is always the store
   var dateOfPurchase = new Date(); //date of purchase
