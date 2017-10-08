@@ -23,7 +23,7 @@ export default class App extends Component {
     maxBudget: 1.0,
     moneySpent: 0.0,
     progPercent: 0.0,
-    remaining: 1.0,
+    remaining: 1.0;
   }
   loadPage = () => {
     var data = require("./test.json")
@@ -36,7 +36,6 @@ export default class App extends Component {
     this.setState({
       moneySpent: data.totalSpent
     });
-
     this.setState({
       progPercent: data.totalPercent
     });
@@ -81,6 +80,7 @@ export default class App extends Component {
       </View>
     );
   }
+  
 }
 
   
@@ -90,7 +90,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+  },
+  list: {
+    width: '100%'
   },
   list: {
     width: '100%'

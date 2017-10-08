@@ -37,6 +37,7 @@ export default class BudgetPart extends Component {
           <Progress.Bar progress={progressPercent} width={250} />
         </View>
       </TouchableHighlight>
+
     ); 
   }
 }
