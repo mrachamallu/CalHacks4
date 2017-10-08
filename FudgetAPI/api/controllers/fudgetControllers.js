@@ -21,14 +21,6 @@ exports.list_sorted_items = function(req, res) {
   });
 };
 
-exports.get_total_spent = function(req, res) {
-  var sum = Item.aggregate([
-    { $group: { _id: "$_id", count: { $sum: "$price" } } }
-  ])
-  res.json(sum);
-};
-
-
 exports.create_an_item = function(req, res) {
   var new_item = new Item(req.body);
   new_item.save(function(err, items) {
@@ -133,7 +125,7 @@ exports.read_receipt = function(req, res) {
     i = j;
   }
   var out = jsonOfItems;
-
+  console.log(out);
   res.setHeader("Content-Type", "application/json");
   res.json(out);
 }
