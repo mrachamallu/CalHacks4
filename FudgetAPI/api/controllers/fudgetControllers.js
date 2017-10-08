@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   Item = mongoose.model('Items');
 
 exports.list_all_items = function(req, res) {
-  Item.find({'name': 'apple'}, function(err, items) {
+  Item.find({}, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
@@ -27,8 +27,12 @@ exports.get_total_spent = function(req, res) {
   Item.find(req.body, function(err, items) {
     if (err)
       res.send(err);
-    spent += items.price;
   });
+  var spent = 0;
+  for(j in res.body) {
+    spent += j['cost'];
+    console.log(j['cost']);
+  }
   res.json({"total_spending": spent});
 };
 
