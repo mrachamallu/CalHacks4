@@ -19,6 +19,9 @@ import {
 import BudgetPart from './BudgetPart'
 
 export default class App extends Component {
+  static navigationOptions = {
+    title: 'Home',
+  };
   state = {
     budgets: [],
     maxBudget: 1.0,

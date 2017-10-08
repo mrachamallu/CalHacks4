@@ -1,18 +1,24 @@
 import Expo from 'expo';
 import React from 'react';
+import { Entypo } from '@expo/vector-icons';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
+  TouchableHighlight,
   Image,
   ScrollView,
 } from 'react-native';
 
 export default class App extends React.Component {
+  static navigationOptions = {
+    title: 'Camera',
+  };
   state = {
     imageUri: null,
     text: null,
+    status: 'No picture taken yet'
   }
 
   render() {
@@ -36,20 +42,25 @@ export default class App extends React.Component {
     }
 
     return (
-      <ScrollView style={styles.container}>
-        {imageView}
-        <Text>STATUS: {this.state.status}</Text>
-        {textView}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this._pickImage}>
-          <Text style={{fontSize: 30}}>take a picture!</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      <View style={styles.container}>
+        <View>
+          {imageView}
+          <Text>STATUS: {this.state.status}</Text>
+          <TouchableHighlight style={styles.button} onPress={this._pickImage}>
+            <Text style={styles.buttonText}>Take a picture!</Text>
+          </TouchableHighlight>
+        </View>
+        <ScrollView>
+          {textView}
+        </ScrollView>
+      </View>
     );
   }
 
   _pickImage = async () => {
+    this.setState({
+      status: 'analyzing...'
+    });
     const {
       cancelled,
       uri,
@@ -141,7 +152,10 @@ const styles = StyleSheet.create({
     height: 60,
     width: 200,
     alignItems: 'center',
+    textAlign: 'center',
     borderRadius: 10,
-    fontSize: 100,
+  },
+  buttonText: {
+    fontSize: 20
   }
 });
