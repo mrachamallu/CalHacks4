@@ -30,7 +30,7 @@ exports.get_total_spent = function(req, res) {
       res.send(err);
     i = items;
   });
-  var spent = 0;
+  console.log(i);
   for(j in i) {
     spent += j["cost"];
     console.log(j["cost"]);
