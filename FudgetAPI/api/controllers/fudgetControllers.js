@@ -22,21 +22,9 @@ exports.list_sorted_items = function(req, res) {
 };
 
 exports.get_total_spent = function(req, res) {
-  console.log(req.body);
-  var spent = 0;
-  var i = [];
-  Item.find(req.body, function(err, items) {
-    if (err)
-      res.send(err);
-    i.json(items);
-  });
-  console.log(i);
-  for(j in i) {
-    spent += j["cost"];
-    console.log(j["cost"]);
-  }
-  res.json({"total_spending": spent});
-};
+  db.collection.aggregate([
+    { $group: { _id: "$_id", count: { $sum: "$price" } } }
+  ])};
 
 
 exports.create_an_item = function(req, res) {
