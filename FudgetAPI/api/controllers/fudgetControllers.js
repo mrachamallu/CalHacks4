@@ -74,7 +74,7 @@ exports.delete_an_item = function(req, res) {
 //array of json objects
 var jsonOfItems = [];
 exports.read_receipt = function(req, res) {
-  var TA = req.body.textAnnotations;
+  var TA = JSON.parse(req).body.textAnnotations;
   console.log(TA);
   var storeLocation = TA[1].description; //the first element is always the store
   var dateOfPurchase = new Date(); //date of purchase
@@ -126,6 +126,6 @@ exports.read_receipt = function(req, res) {
   }
   var out = jsonOfItems;
 
-
+  res.setHeader("Content-Type:application/json");
   res.json(out);
 }
