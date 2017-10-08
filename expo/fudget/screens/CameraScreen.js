@@ -1,5 +1,6 @@
 import Expo from 'expo';
 import React from 'react';
+import { Entypo } from '@expo/vector-icons';
 import {
   StyleSheet,
   Text,
@@ -10,6 +11,9 @@ import {
 } from 'react-native';
 
 export default class App extends React.Component {
+  static navigationOptions = {
+    title: 'Camera',
+  };
   state = {
     imageUri: null,
     text: null,

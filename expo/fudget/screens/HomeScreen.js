@@ -18,12 +18,15 @@ import {
 import BudgetPart from './BudgetPart'
 
 export default class App extends Component {
+  static navigationOptions = {
+    title: 'Home',
+  };
   state = {
     budgets: [],
     maxBudget: 1.0,
     moneySpent: 0.0,
     progPercent: 0.0,
-    remaining: 1.0;
+    remaining: 1.0
   }
   loadPage = () => {
     var data = require("./test.json")
@@ -42,7 +45,6 @@ export default class App extends Component {
     this.setState({
       remaining: data.remainder
     });
-    alert(this.state.remaining);
   }
   keyExtractor = (item, index) => item.id;
   
