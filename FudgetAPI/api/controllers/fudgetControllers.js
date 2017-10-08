@@ -24,14 +24,16 @@ exports.list_sorted_items = function(req, res) {
 exports.get_total_spent = function(req, res) {
   console.log(req.body);
   var spent = 0;
+  var i = [];
   Item.find(req.body, function(err, items) {
     if (err)
       res.send(err);
+    i = items;
   });
   var spent = 0;
-  for(j in items) {
-    spent += j['cost'];
-    console.log(j['cost']);
+  for(j in i) {
+    spent += j["cost"];
+    console.log(j["cost"]);
   }
   res.json({"total_spending": spent});
 };
