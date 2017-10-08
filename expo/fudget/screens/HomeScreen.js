@@ -1,7 +1,6 @@
+import React, { Component } from 'react';
 import Expo from 'expo';
-import React from 'react';
 import * as Progress from 'react-native-progress';
-
 import {
   StyleSheet, 
   Text, 
@@ -13,78 +12,78 @@ import {
   TouchableWithoutFeedback,
   Image, 
   Keyboard,
-  Platform
+  Platform,
 } from 'react-native';
 
-import BudgetPart from './BudgetPart';
+import BudgetPart from './BudgetPart'
 
-export default class App extends React.Component {
+export default class App extends Component {
   state = {
-      categories: [],
+    budgets: [],
+    maxBudget: 1.0,
+    moneySpent: 0.0,
+    progPercent: 0.0,
+    remaining: 1.0;
   }
-
-  loadMonth = () => {
-    fetch("test.json")
-          .then((res) => res.json())
-          .then((data) => {
-            this.setState({
-              categories: data.topics
-            });
-          });
-    Keyboard.dismiss()
+  loadPage = () => {
+    var data = require("./test.json")
+    this.setState({
+      budgets: data.topics
+    });
+    this.setState({
+      maxBudget: data.totalBudget
+    });
+    this.setState({
+      moneySpent: data.totalSpent
+    });
+    this.setState({
+      progPercent: data.totalPercent
+    });
+    this.setState({
+      remaining: data.remainder
+    });
+    alert(this.state.remaining);
   }
+  keyExtractor = (item, index) => item.id;
+  
 
-  renderBudget({topic}) {
-    return <BudgetPart 
-    type = {topic.type} 
-    budget = {topic.budget}
-    moneySpent = {topic.moneySpent}
-    moneyLeft = {topic.moneyLeft}
-    percentage = {topic.percentage}
+  renderBudget = ({item}) => {
+    return <BudgetPart
+
+        budget = {item.budget} 
+        type = {item.type}
+        moneySpent = {item.moneySpent}
+        moneyLeft = {item.moneyLeft}
+        percentage = {item.percentage}
     />
+      
   }
+  componentWillMount() {
+    this.loadPage();
+  }
+
   render() {
     return (
       <View style={styles.container}>
-      <View>
-        <Button title="Search" onPress={this.loadMonth} />
-        {/*<ProgressCircle
-            percent={this.state.proportion} use progressbars
-            radius={30}
-            borderWidth={8}
-            color="#000"
-            shadowColor="#999"
-            bgColor="#fff"
-        >
-            <Text style={{ fontSize: 18 }}>{"$30"}</Text>
-        </ProgressCircle>*/}
-      </View>
-
-      <FlatList
-        data={this.state.categories}
-        renderItem={this.renderBudget}
-        style={styles.list}
-      />
+        <Progress.Pie progress={this.state.progPercent} size={100} style={styles.pieChart}/>
+        <View style={styles.remainderStyle}>
+        {(this.state.moneySpent <= this.state.maxBudget) ? (<Text>$ {this.state.remaining} left!</Text>) : (<Text>${this.state.remaining} over!</Text>)}
+        </View>
+        {/*<Button title="Load" onPress={this.loadPage} color='#000000'/>*/}
+        <FlatList
+          data={this.state.budgets}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderBudget}
+          style={styles.list}
+        />
+        
       </View>
     );
   }
-
-  _getData = async () => {
-    const req_data = await fetch('https://fudget-finance.herokuapp.com/items', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
-    const res_data = await req_data.json();
-    this.setState({
-      data: JSON.stringify(res_data),
-      items: res_data.items,
-      budget: res_data.budget,
-    });
-  }
+  
 }
+
+  
 
 const styles = StyleSheet.create({
   container: {
@@ -94,6 +93,15 @@ const styles = StyleSheet.create({
   },
   list: {
     width: '100%'
+  },
+  list: {
+    width: '100%'
+  },
+  pieChart: {
+    padding: 25,
+  },
+  remainderStyle: {
+    fontSize: 16,
   },
 });
 
