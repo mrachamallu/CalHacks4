@@ -29,6 +29,8 @@ var ItemSchema = new Schema({
     default: ['Other']
   }
 });
+module.exports = mongoose.model('Items', ItemSchema);
+
 
 var BudgetSchema = new Schema({
   category: {
@@ -43,6 +45,6 @@ var BudgetSchema = new Schema({
     type: SchemaTypes.Double,
     required: "Please enter a budget value"
   }
-})
+});
+module.exports = mongoose.model('Budgets', BudgetSchema);
 
-module.exports = mongoose.model('Items', ItemSchema);
