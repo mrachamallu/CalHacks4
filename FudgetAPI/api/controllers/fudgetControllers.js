@@ -27,10 +27,9 @@ exports.get_total_spent = function(req, res) {
   Item.find(req.body, function(err, items) {
     if (err)
       res.send(err);
-    res.json(items);
   });
   var spent = 0;
-  for(j in res.json) {
+  for(j in items) {
     spent += j['cost'];
     console.log(j['cost']);
   }
