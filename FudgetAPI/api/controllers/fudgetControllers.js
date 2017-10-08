@@ -1,11 +1,11 @@
 'use strict';
-
+var bodyParser = require('body-parser')
 
 var mongoose = require('mongoose'),
   Item = mongoose.model('Items');
 
 exports.list_all_items = function(req, res) {
-  Item.find({name: 'apple'}, function(err, items) {
+  Item.find({'name': 'apple'}, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
@@ -13,12 +13,23 @@ exports.list_all_items = function(req, res) {
 };
 
 exports.list_sorted_items = function(req, res) {
-  console.log(req.Body);
-  Item.find(req.Body, function(err, items) {
+  console.log(req.body);
+  Item.find(req.body, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
   });
+};
+
+exports.get_total_budget = function(req, res) {
+  console.log(req.body);
+  var budget =
+  Item.find(req.body, function(err, items) {
+    if (err)
+      res.send(err);
+    budget += items.price;
+  });
+  res.json({"total_spending": budget});
 };
 
 
@@ -60,10 +71,11 @@ exports.delete_an_item = function(req, res) {
   });
 };
 
-//array of json objects
-var jsonOfItems = [];
 exports.read_receipt = function(req, res) {
-  var TA = req.body.textAnnotations;
+  //array of json objects
+  var jsonOfItems = [];
+  l=console.log(req.body);
+  var TA = req.body.responses[0].textAnnotations;
   console.log(TA);
   var storeLocation = TA[1].description; //the first element is always the store
   var dateOfPurchase = new Date(); //date of purchase
@@ -107,12 +119,14 @@ exports.read_receipt = function(req, res) {
         store_location: storeLocation
       };  
       //store this json into an array NOT SURE IF THIS IS CORRECT
-      jsonOfItems.push(itemDetails);
+      if(itemDetails.name != "total") {
+        jsonOfItems.push(itemDetails);
+      }
     }
     i = j;
   }
   var out = jsonOfItems;
 
-
+  res.setHeader("Content-Type", "application/json");
   res.json(out);
 }
