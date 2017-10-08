@@ -22,7 +22,7 @@ exports.list_sorted_items = function(req, res) {
 };
 
 exports.get_total_spent = function(req, res) {
-  var sum = db.collection.aggregate([
+  var sum = Item.aggregate([
     { $group: { _id: "$_id", count: { $sum: "$price" } } }
   ])
   res.json(sum);
