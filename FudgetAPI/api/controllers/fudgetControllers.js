@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   Item = mongoose.model('Items');
 
 exports.list_all_items = function(req, res) {
-  Item.find({'name': 'apple'}, function(err, items) {
+  Item.find({}, function(err, items) {
     if (err)
       res.send(err);
     res.json(items);
@@ -21,15 +21,11 @@ exports.list_sorted_items = function(req, res) {
   });
 };
 
-exports.get_total_budget = function(req, res) {
-  console.log(req.body);
-  var budget =
-  Item.find(req.body, function(err, items) {
-    if (err)
-      res.send(err);
-    budget += items.price;
-  });
-  res.json({"total_spending": budget});
+exports.get_total_spent = function(req, res) {
+  var sum = Item.aggregate([
+    { $group: { _id: "$_id", count: { $sum: "$price" } } }
+  ])
+  res.json(sum);
 };
 
 
@@ -74,8 +70,8 @@ exports.delete_an_item = function(req, res) {
 exports.read_receipt = function(req, res) {
   //array of json objects
   var jsonOfItems = [];
-
-  var TA = req.body;
+  console.log(req.body);
+  var TA = req.body.responses[0].textAnnotations;
   console.log(TA);
   var storeLocation = TA[1].description; //the first element is always the store
   var dateOfPurchase = new Date(); //date of purchase
@@ -112,6 +108,17 @@ exports.read_receipt = function(req, res) {
         console.log(itemName);
       }      
       //at this point, there is enough info to make a json object
+
+      //set category. Use NLP later for better classification
+      if(store_location === 'Target') {
+        category = 'Groceries';
+      }
+      else if(store_location === 'Starbucks'){
+        category = 'Coffee';
+      }
+      else if(store_location === '') {
+
+      }
       var itemDetails = {
         name : itemName,
         date_bought: dateOfPurchase,

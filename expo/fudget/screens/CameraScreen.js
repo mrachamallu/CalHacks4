@@ -6,6 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  TouchableHighlight,
   Image,
   ScrollView,
 } from 'react-native';
@@ -17,6 +18,7 @@ export default class App extends React.Component {
   state = {
     imageUri: null,
     text: null,
+    status: 'No picture taken yet'
   }
 
   render() {
@@ -39,31 +41,26 @@ export default class App extends React.Component {
       );
     }
 
-    // var texts = [];
-    // for(let i = 0; i < this.state.text_arr.size; i++){
-    //   texts.push(
-    //     <View key = {i}>
-    //       <Text>
-    //         {this.state.text_arr.textAnnotations[i].description}
-    //       </Text>
-    //     </View>
-    //   );
-    // }
-
     return (
-      <ScrollView style={styles.container}>
-        {imageView}
-        {textView}
-        <TouchableOpacity
-          style={{ margin: 5, padding: 5, backgroundColor: '#ddd' }}
-          onPress={this._pickImage}>
-          <Text>take a picture!</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      <View style={styles.container}>
+        <View>
+          {imageView}
+          <Text>STATUS: {this.state.status}</Text>
+          <TouchableHighlight style={styles.button} onPress={this._pickImage}>
+            <Text style={styles.buttonText}>Take a picture!</Text>
+          </TouchableHighlight>
+        </View>
+        <ScrollView>
+          {textView}
+        </ScrollView>
+      </View>
     );
   }
 
   _pickImage = async () => {
+    this.setState({
+      status: 'analyzing...'
+    });
     const {
       cancelled,
       uri,
@@ -86,15 +83,17 @@ export default class App extends React.Component {
           },
           features:[
             {
-              type: 'DOCUMENT_TEXT_DETECTION'
+              type: 'TEXT_DETECTION',
+              maxResults: 100,
             }
           ]
         },
       ],
     };
 
+
     const key = 'AIzaSyCScDq8xvUnb1x4JDyt9zRHawD-imeyzuE';
-    const response_vis = await fetch('https://vision.googleapis.com/v1/images:annotate?key=${key}', {
+    const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${key}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -102,46 +101,61 @@ export default class App extends React.Component {
       },
       body: JSON.stringify(body),
     });
-    const parsed_vis = await response_vis.json();
+    const parsed = await response.json();
     this.setState({
-      text: parsed_vis.responses[0].textAnnotations[1].description,
-      text_arr: parsed_vis,
+      text: parsed.responses[0].textAnnotations[0].description,
     });
 
     // send to custom api
-    const res_db = await fetch('https://fudget-finance.herokuapp.com/receipts', {
+    this.setState({
+      status: 'sending information to fudget parser...'
+    });
+    const response1 = await fetch('https://fudget-finance.herokuapp.com/receipt', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(parsed_vis),
+      body: JSON.stringify(parsed),
     });
-    const parsed_db = await res_db.json();
-    this.setState({
-      //label: JSON.stringify(parsed_db),
-    });
+    const parsed1 = await response1.json();
 
+    this.setState({
+      status: 'verified content. sending bits to be reconstructed...'
+    });
     // confirm send to db (one at a time)
-    for(var i = 0; i < parsed_db.length; i++){
+    for(var i = 0; i < parsed1.length; i++){
       fetch('https://fudget-finance.herokuapp.com/items', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(parsed_db[i]),
+        body: JSON.stringify(parsed1[i]),
       });
     }
+    this.setState({
+      status: 'Done! Check out the home page!'
+    });
   }
-}
 
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#5284f2',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button: {
+    backgroundColor: '#ffffff',
+    height: 60,
+    width: 200,
+    alignItems: 'center',
+    textAlign: 'center',
+    borderRadius: 10,
+  },
+  buttonText: {
+    fontSize: 20
+  }
 });
-
