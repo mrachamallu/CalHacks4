@@ -28,7 +28,7 @@ exports.get_total_spent = function(req, res) {
   Item.find(req.body, function(err, items) {
     if (err)
       res.send(err);
-    i = items;
+    i += items;
   });
   console.log(i);
   for(j in i) {
