@@ -60,40 +60,42 @@ exports.delete_an_item = function(req, res) {
 };
 
 exports.read_receipt = function(req, res) {
-  //array of json objects
   var jsonOfItems = [];
-  console.log(req.body);
+  //array of json objects
+  //console.log(req.body);
   var TA = req.body.responses[0].textAnnotations;
   console.log(TA);
+  console.log('-----------');
   var storeLocation = TA[1].description; //the first element is always the store
   var dateOfPurchase = new Date(); //date of purchase
   var dollars;
   var cents;
   var value = 0;
   for(var i=0 ; i<TA.length ; i++) {
-    var j = i; //j is a temp counter
+    var j = i;
     //add value after dollar sign
     if(TA[i].description === "$") {
       dollars = 0;
       cents = 0;
       console.log("$");
-      j++;
-      while(Number(TA[j].description)) {
-        console.log(TA[j].description);
+      i++;
+      while(Number(TA[i].description)) {
+        //console.log(TA[i].description);
         dollars += Number(TA[j].description);
-        j++;
+        i++;
       }//add cents if there is a decimal
-      if(TA[j].description === ".") {
-        j++;
-        while(Number(TA[j].description)) {
-          console.log(TA[j].description);
-          cents += Number(TA[j].description);
-          j++;
+      if(TA[i].description === ".") {
+        i++;
+        while(Number(TA[i].description)) {
+          //console.log(TA[i].description);
+          cents += Number(TA[i].description);
+          i++;
         }
       }
       value = dollars + (cents/100);
       console.log(value); //prints dollar value
 
+      i = j;
       //if there is a $ sign, print the word that comes before the $ amount.
       if (i-1 >= 0) {
         var itemName = TA[i-1].description;
@@ -118,9 +120,9 @@ exports.read_receipt = function(req, res) {
         store_location: storeLocation
       };  
       //store this json into an array NOT SURE IF THIS IS CORRECT
-      if(itemDetails.name != "total") {
+      // if(itemDetails.name != "total") {
         jsonOfItems.push(itemDetails);
-      }
+      // }
     }
     i = j;
   }
