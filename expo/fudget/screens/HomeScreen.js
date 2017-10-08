@@ -10,6 +10,7 @@ import {
   Button, 
   TouchableHighlight,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Image, 
   Keyboard,
   Platform,
@@ -23,33 +24,17 @@ export default class App extends Component {
     maxBudget: 1.0,
     moneySpent: 0.0,
     progPercent: 0.0,
-    remaining: 1.0;
+    remaining: 1.0,
   }
   loadPage = () => {
-    var data = require("./test.json")
-    this.setState({
-      budgets: data.topics
-    });
-    this.setState({
-      maxBudget: data.totalBudget
-    });
-    this.setState({
-      moneySpent: data.totalSpent
-    });
-    this.setState({
-      progPercent: data.totalPercent
-    });
-    this.setState({
-      remaining: data.remainder
-    });
-    alert(this.state.remaining);
+    this._getData();
+    //this._getBackupData();
   }
   keyExtractor = (item, index) => item.id;
   
 
   renderBudget = ({item}) => {
     return <BudgetPart
-
         budget = {item.budget} 
         type = {item.type}
         moneySpent = {item.moneySpent}
@@ -65,11 +50,11 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <TouchableOpacity onPress={this._getData}><Text style={styles.refresh}>Refresh</Text></TouchableOpacity>
         <Progress.Pie progress={this.state.progPercent} size={100} style={styles.pieChart}/>
         <View style={styles.remainderStyle}>
         {(this.state.moneySpent <= this.state.maxBudget) ? (<Text>$ {this.state.remaining} left!</Text>) : (<Text>${this.state.remaining} over!</Text>)}
         </View>
-        {/*<Button title="Load" onPress={this.loadPage} color='#000000'/>*/}
         <FlatList
           data={this.state.budgets}
           keyExtractor={this.keyExtractor}
@@ -80,7 +65,35 @@ export default class App extends Component {
       </View>
     );
   }
-  
+
+  _getData = async () => {
+    const req_data = await fetch('https://fudget-finance.herokuapp.com/items', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    });
+    const data = await req_data.json();
+    this.setState({
+      budgets: data.topics,
+      maxBudget: data.totalBudget,
+      moneySpent: data.totalSpent,
+      progPercent: data.totalPercent,
+      remaining: data.remainder,
+    });
+  }
+
+  _getBackupData = () => {
+    var data = require("./test.json")
+    this.setState({
+      budgets: data.topics,
+      maxBudget: data.totalBudget,
+      moneySpent: data.totalSpent,
+      progPercent: data.totalPercent,
+      remaining: data.remainder,
+    });
+  }
 }
 
   
@@ -103,5 +116,13 @@ const styles = StyleSheet.create({
   remainderStyle: {
     fontSize: 16,
   },
+  refresh: {
+    padding: 10,
+    marginTop: 20,
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: '#000000',
+    borderRadius: 10,
+  }
 });
 
