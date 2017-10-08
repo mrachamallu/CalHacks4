@@ -71,10 +71,10 @@ exports.read_receipt = function(req, res) {
   var storeLocation = TA[1].description; //the first element is always the store
   console.log(storeLocation);
   //set category. Use NLP later for better classification
-  if(store_location === 'Target') {
+  if(storeLocation === 'Target') {
     category = 'Groceries';
   }
-  else if(store_location === 'Starbucks'){
+  else if(storeLocation === 'Starbucks'){
     category = 'Coffee';
   }
 
