@@ -1,23 +1,30 @@
 {
 	"topics": [{
 		"type": "Food",
-		"budget": 15.00,
-		"moneySpent": 4.35,
-		"moneyLeft": 10.65
-		"percentage": 29
+		"budget": "15.00",
+		"moneySpent": "4.35",
+		"moneyLeft": "10.65",
+		"percentage": "29",
+		"id": "abcde"
 	},
 	{
 		"type": "Clothing",
-		"budget": 25.00,
-		"moneySpent": 10.00,
-		"moneyLeft": 15.00,
-		"percentage": 40
+		"budget": "25.00",
+		"moneySpent": "10.00",
+		"moneyLeft": "15.00",
+		"percentage": "40",
+		"id": "lksjf"
 	},
 	{
 		"type": "Coffee",
-		"budget": 10.00,
-		"moneySpent": 7.00,
-		"moneyLeft": 3.00,
-		"percentage": 70
-	}]
+		"budget": "10.00",
+		"moneySpent": "7.00",
+		"moneyLeft": "3.00",
+		"percentage": "70",
+		"id": "odjkw" 
+	}],
+	"totalBudget": 100.00,
+	"totalSpent": 99.00,
+	"totalPercent": 0.99,
+	"remainder:": 1.00
 }
