@@ -29,7 +29,7 @@ exports.get_total_spent = function(req, res) {
       res.send(err);
     spent += items.price;
   });
-  res.json({"total_spending": budget});
+  res.json({"total_spending": spent});
 };
 
 
