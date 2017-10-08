@@ -127,6 +127,6 @@ exports.read_receipt = function(req, res) {
   }
   var out = jsonOfItems;
 
-  res.setHeader("Content-Type:application/json");
+  res.setHeader("Content-Type", "application/json");
   res.json(out);
 }
