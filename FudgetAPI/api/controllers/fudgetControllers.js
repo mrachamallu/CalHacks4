@@ -60,7 +60,7 @@ exports.delete_an_item = function(req, res) {
 };
 
 exports.read_receipt = function(req, res) {
-  var jsonOfItems;
+  var jsonOfItems = [];
   var TA = req.body.responses[0].textAnnotations;
   console.log(TA);
   console.log('-----------');
